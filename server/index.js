@@ -41,6 +41,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 // For Vercel Serverless
 module.exports = async (req, res) => {
-  await initializeServer();
-  return app(req, res);
+  try {
+    await initializeServer();
+    return app(req, res);
+  } catch (err) {
+    console.error('Server initialization error:', err);
+    res.status(500).json({ error: 'Internal Server Error: Backend initialization failed.' });
+  }
 };

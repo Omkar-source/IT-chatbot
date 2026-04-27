@@ -13,6 +13,8 @@ function App() {
   const [chatHistory, setChatHistory] = useState([]);
   const messagesEndRef = useRef(null);
 
+  const [initError, setInitError] = useState(null);
+
   // Initialize session and fetch history
   useEffect(() => {
     const initChat = async () => {
@@ -29,6 +31,7 @@ function App() {
         }
       } catch (error) {
         console.error('Failed to initialize chat:', error);
+        setInitError(error.message || 'Failed to connect to server');
       }
     };
 
@@ -103,7 +106,15 @@ function App() {
 
       {/* Chat Area */}
       <main className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto px-4 py-6 scroll-smooth">
-        {(chatHistory || []).length === 0 ? (
+        {initError ? (
+          <div className="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto mt-10">
+            <div className="w-20 h-20 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-6">
+              <Bot size={40} />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Connection Error</h2>
+            <p className="text-red-500 mb-8">{initError}. Please check your backend connection.</p>
+          </div>
+        ) : (chatHistory || []).length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto mt-10">
             <div className="w-20 h-20 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-6">
               <Bot size={40} />
