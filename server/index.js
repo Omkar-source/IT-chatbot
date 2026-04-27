@@ -18,12 +18,29 @@ app.use(express.json());
 // Routes
 app.use('/api', apiRoutes);
 
-const PORT = process.env.PORT || 5000;
+// Connect to DB
+let isDbConnected = false;
 
-// Connect to DB and start server
-connectDB().then(async () => {
-  await loadKnowledgeBase();
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const initializeServer = async () => {
+  if (!isDbConnected) {
+    await connectDB();
+    await loadKnowledgeBase();
+    isDbConnected = true;
+  }
+};
+
+// For local development
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'production') {
+  initializeServer().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   });
-});
+}
+
+// For Vercel Serverless
+module.exports = async (req, res) => {
+  await initializeServer();
+  return app(req, res);
+};
