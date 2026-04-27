@@ -31,7 +31,8 @@ function App() {
         }
       } catch (error) {
         console.error('Failed to initialize chat:', error);
-        setInitError(error.message || 'Failed to connect to server');
+        const errMsg = error.response?.data?.error || error.message || 'Failed to connect to server';
+        setInitError(errMsg);
       }
     };
 

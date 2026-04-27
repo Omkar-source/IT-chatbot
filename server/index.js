@@ -46,6 +46,6 @@ module.exports = async (req, res) => {
     return app(req, res);
   } catch (err) {
     console.error('Server initialization error:', err);
-    res.status(500).json({ error: 'Internal Server Error: Backend initialization failed.' });
+    res.status(500).json({ error: `Backend initialization failed: ${err.message}` });
   }
 };
