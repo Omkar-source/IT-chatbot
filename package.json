@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:client": "vite",
+    "dev:api": "cd api && npm run dev",
+    "dev": "npm run dev:client",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
