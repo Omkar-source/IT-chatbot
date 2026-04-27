@@ -61,7 +61,8 @@ function App() {
       setChatHistory(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (error) {
       console.error('Failed to send message:', error);
-      setChatHistory(prev => [...prev, { role: 'assistant', content: '**Error:** Failed to connect to the server. Please try again.' }]);
+      const errorMsg = error.response?.data?.error || 'Failed to connect to the server. Please try again.';
+      setChatHistory(prev => [...prev, { role: 'assistant', content: `**Error:** ${errorMsg}` }]);
     } finally {
       setIsLoading(false);
     }

@@ -95,7 +95,10 @@ ${kbContext}`;
     res.status(200).json({ reply: assistantReply });
   } catch (error) {
     console.error('Chat error:', error);
-    res.status(500).json({ message: 'Error processing chat', error: error.message });
+    if (error.status === 429) {
+      return res.status(429).json({ error: 'API Rate Limit Exceeded. The syllabus data is very large, so you have hit the free tier quota limits. Please wait 1 minute before sending another message.' });
+    }
+    res.status(500).json({ error: 'Error processing chat: ' + error.message });
   }
 };
 
